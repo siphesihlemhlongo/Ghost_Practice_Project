@@ -34,6 +34,25 @@ You can log in using the following pre-configured accounts:
 
 ---
 
+## 📸 Screenshots
+
+### 1. Dashboard
+![Dashboard](screenshots/dashboard.png)
+
+### 2. Activities (Auto-Tracking Simulation)
+![Activities](screenshots/activities.png)
+
+### 3. Time Entries (Billing Units)
+![Time Entries](screenshots/time_entries.png)
+
+### 4. Clients & Matters
+![Clients and Matters](screenshots/clients_matters.png)
+
+### 5. Invoice Generation
+![Invoice](screenshots/invoice.png)
+
+---
+
 ## 📄 Project Documentation
 
 ### 1. Introduction
