@@ -89,6 +89,8 @@ Users are given the ability to review and approve entries before they are used f
 
 ### 6. System Architecture
 
+![System Architecture](screenshots/architecture_diagram.png)
+
 **Description:**
 The system follows a modular client-server architecture consisting of multiple interacting components:
 - **Frontend (Web Application):** Provides user interface for viewing time entries, dashboards, and invoices. Built using HTML5, CSS3 (custom design system), and JavaScript (Chart.js).
@@ -102,6 +104,8 @@ The system follows a modular client-server architecture consisting of multiple i
 User activities are captured automatically through the Activity Tracker, which integrates with external systems. These activities are sent to the backend, where they are processed into structured time entries. The backend communicates with the database to store and retrieve data, and applies billing logic to generate invoices. The frontend allows users to interact with the system and review outputs.
 
 ### 7. Entity Relationship Diagram (ERD)
+
+![Entity Relationship Diagram](screenshots/erd.png)
 
 **Entities:**
 - `User`: Represents attorneys using the system
