@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+{% block title %}Activities - Ghost Practice{% endblock %}
+{% block page_title %}Activity Tracking{% endblock %}
+
+{% block topbar_actions %}
+<button class="btn btn-accent" onclick="simulateActivities(3)">
+    <i class="fas fa-radar"></i> Simulate 3 Activities
+</button>
+{% endblock %}
+
+{% block content %}
+<div class="page-activities">
+    <!-- Quick Add -->
+    <div class="card">
+        <div class="card-header">
+            <h3><i class="fas fa-plus-circle"></i> Record Activity</h3>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('activities.add') }}" class="form-row">
+                <div class="form-group">
+                    <label>Type</label>
+                    <select name="type" required>
+                        <option value="email">📧 Email</option>
+                        <option value="meeting">👥 Meeting</option>
+                        <option value="call">📞 Call</option>
+                        <option value="document">📄 Document</option>
+                        <option value="research">🔍 Research</option>
+                    </select>
+                </div>
+                <div class="form-group flex-2">
+                    <label>Description</label>
+                    <input type="text" name="title" placeholder="What did you work on?" required>
+                </div>
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="date" name="date" required value="{{ today if today else '' }}">
+                </div>
+                <div class="form-group">
+                    <label>Start</label>
+                    <input type="time" name="start_time" id="act_start" onchange="calcActDur()" required>
+                </div>
+                <div class="form-group">
+                    <label>End</label>
+                    <input type="time" name="end_time" id="act_end" onchange="calcActDur()" required>
+                </div>
+                <div class="form-group">
+                    <label>Duration (min)</label>
+                    <input type="number" name="duration" id="act_duration" readonly style="background-color: var(--bg-secondary); cursor: not-allowed;">
+                </div>
+                <div class="form-group">
+                    <label>Client</label>
+                    <select id="client-select" onchange="filterMatters('client-select', 'matter-select')">
+                        <option value="">-- All Clients --</option>
+                        {% for c in clients %}
+                        <option value="{{ c.id }}">{{ c.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Matter</label>
+                    <select name="matter_id" id="matter-select">
+                        <option value="">-- Unassigned --</option>
+                        {% for m in matters %}
+                        <option value="{{ m.id }}" data-client="{{ m.client_id }}">{{ m.reference }} - {{ m.title|truncate(30) }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group form-action">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i> Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Filter -->
+    <div class="filter-bar">
+        <a href="{{ url_for('activities.index', status='all') }}" class="filter-btn {% if status_filter == 'all' %}active{% endif %}">All</a>
+        <a href="{{ url_for('activities.index', status='pending') }}" class="filter-btn {% if status_filter == 'pending' %}active{% endif %}">Pending</a>
+        <a href="{{ url_for('activities.index', status='converted') }}" class="filter-btn {% if status_filter == 'converted' %}active{% endif %}">Converted</a>
+        <a href="{{ url_for('activities.index', status='dismissed') }}" class="filter-btn {% if status_filter == 'dismissed' %}active{% endif %}">Dismissed</a>
+    </div>
+
+    <!-- Activities Table -->
+    <div class="card">
+        <div class="card-body table-responsive">
+            {% if activities %}
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Date & Time</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                        <th>Source</th>
+                        <th>Duration</th>
+                        <th>Matter</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for act in activities %}
+                    <tr class="fade-in" style="animation-delay: {{ loop.index0 * 0.03 }}s">
+                        <td>
+                            {{ act.started_at.strftime('%d %b %Y') }}<br>
+                            {% if act.ended_at %}
+                            <small class="text-muted">{{ act.started_at.strftime('%H:%M') }} - {{ act.ended_at.strftime('%H:%M') }}</small>
+                            {% else %}
+                            <small class="text-muted">{{ act.started_at.strftime('%H:%M') }}</small>
+                            {% endif %}
+                        </td>
+                        <td><span class="type-badge type-{{ act.type }}"><i class="fas {{ act.type_icon }}"></i> {{ act.type|title }}</span></td>
+                        <td class="title-cell">{{ act.title }}</td>
+                        <td><span class="source-badge">{{ act.source }}</span></td>
+                        <td>{{ act.duration_minutes|int }} min</td>
+                        <td>{% if act.matter %}{{ act.matter.reference }}{% else %}<em class="text-muted">Unassigned</em>{% endif %}</td>
+                        <td><span class="status-badge status-{{ act.status }}">{{ act.status }}</span></td>
+                        <td class="actions-cell">
+                            {% if act.status == 'pending' %}
+                            <form method="POST" action="{{ url_for('activities.convert', activity_id=act.id) }}" class="inline-form">
+                                {% if not act.matter_id %}
+                                <select name="matter_id" required class="sm-select">
+                                    <option value="">Assign...</option>
+                                    {% for m in matters %}
+                                    <option value="{{ m.id }}">{{ m.reference }}</option>
+                                    {% endfor %}
+                                </select>
+                                {% endif %}
+                                <button type="submit" class="btn btn-sm btn-success" title="Convert to time entry"><i class="fas fa-check"></i></button>
+                            </form>
+                            <form method="POST" action="{{ url_for('activities.dismiss', activity_id=act.id) }}" class="inline-form">
+                                <button type="submit" class="btn btn-sm btn-ghost" title="Dismiss"><i class="fas fa-times"></i></button>
+                            </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="empty-state">
+                <i class="fas fa-bolt"></i>
+                <p>No activities found. Start tracking or simulate activities!</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    setupCascadingDropdown('client-select', 'matter-select');
+});
+
+function setupCascadingDropdown(clientId, matterId) {
+    const clientSelect = document.getElementById(clientId);
+    const matterSelect = document.getElementById(matterId);
+    if (!clientSelect || !matterSelect) return;
+
+    // Store original options
+    const originalOptions = Array.from(matterSelect.options).map(opt => ({
+        value: opt.value,
+        text: opt.text,
+        clientId: opt.getAttribute('data-client'),
+        isDefault: !opt.value
+    }));
+
+    clientSelect.addEventListener('change', function() {
+        const selectedClient = this.value;
+        
+        // Clear current options
+        matterSelect.innerHTML = '';
+        
+        // Add back default/unassigned
+        const defaults = originalOptions.filter(o => o.isDefault);
+        defaults.forEach(opt => {
+            const newOpt = new Option(opt.text, opt.value);
+            matterSelect.add(newOpt);
+        });
+
+        // Add matching matters
+        const matching = originalOptions.filter(o => !o.isDefault && (!selectedClient || o.clientId === selectedClient));
+        matching.forEach(opt => {
+            const newOpt = new Option(opt.text, opt.value);
+            newOpt.setAttribute('data-client', opt.clientId);
+            matterSelect.add(newOpt);
+        });
+    });
+}
+
+function calcActDur() {
+    const s = document.getElementById('act_start').value;
+    const e = document.getElementById('act_end').value;
+    if (s && e) {
+        const d1 = new Date("2000-01-01T" + s + ":00");
+        const d2 = new Date("2000-01-01T" + e + ":00");
+        let diff = (d2 - d1) / 60000;
+        if (diff < 0) diff += 24 * 60; // handle overnight
+        document.getElementById('act_duration').value = diff;
+    }
+}
+</script>
+{% endblock %}

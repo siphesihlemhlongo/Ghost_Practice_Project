@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% block title %}Invoice {{ invoice.invoice_number }} - Ghost Practice{% endblock %}
+{% block page_title %}Invoice {{ invoice.invoice_number }}{% endblock %}
+
+{% block topbar_actions %}
+<a href="{{ url_for('invoices.pdf', invoice_id=invoice.id) }}" class="btn btn-ghost" target="_blank"><i class="fas fa-print"></i> Print</a>
+{% if invoice.status == 'draft' %}
+<form method="POST" action="{{ url_for('invoices.send_invoice', invoice_id=invoice.id) }}" class="inline-form">
+    <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Mark Sent</button>
+</form>
+{% elif invoice.status == 'sent' %}
+<form method="POST" action="{{ url_for('invoices.mark_paid', invoice_id=invoice.id) }}" class="inline-form">
+    <button type="submit" class="btn btn-success"><i class="fas fa-check"></i> Mark Paid</button>
+</form>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="invoice-detail">
+    <div class="card invoice-card">
+        <!-- Header -->
+        <div class="invoice-header">
+            <div class="invoice-branding">
+                <h2><i class="fas fa-ghost"></i> MB Attorneys</h2>
+                <p>Houghton Estate, Johannesburg</p>
+                <p>Tel: +27 11 463 9401</p>
+                <p>www.mb.co.za</p>
+            </div>
+            <div class="invoice-meta">
+                <h1>TAX INVOICE</h1>
+                <table class="meta-table">
+                    <tr><td>Invoice No:</td><td><strong>{{ invoice.invoice_number }}</strong></td></tr>
+                    <tr><td>Date:</td><td>{{ invoice.date_issued.strftime('%d %B %Y') }}</td></tr>
+                    <tr><td>Due Date:</td><td>{{ invoice.due_date.strftime('%d %B %Y') if invoice.due_date else 'N/A' }}</td></tr>
+                    <tr><td>Status:</td><td><span class="status-badge status-{{ invoice.status }}">{{ invoice.status|upper }}</span></td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Client Info -->
+        <div class="invoice-client">
+            <h4>Bill To:</h4>
+            <p><strong>{{ invoice.client.name }}</strong></p>
+            {% if invoice.client.address %}<p>{{ invoice.client.address }}</p>{% endif %}
+            {% if invoice.client.email %}<p>{{ invoice.client.email }}</p>{% endif %}
+        </div>
+
+        <!-- Matter -->
+        <div class="invoice-matter">
+            <p><strong>Re:</strong> {{ invoice.matter.title }} ({{ invoice.matter.reference }})</p>
+            {% if invoice.notes %}<p>{{ invoice.notes }}</p>{% endif %}
+        </div>
+
+        <!-- Items -->
+        <table class="invoice-table">
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th class="text-center">Units</th>
+                    <th class="text-right">Rate (R/hr)</th>
+                    <th class="text-right">Amount (R)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td>{{ item.description }}</td>
+                    <td class="text-center">{{ item.units }}</td>
+                    <td class="text-right">{{ "{:,.2f}".format(item.rate) }}</td>
+                    <td class="text-right">{{ "{:,.2f}".format(item.amount) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr class="subtotal-row">
+                    <td colspan="3" class="text-right">Subtotal</td>
+                    <td class="text-right">R{{ "{:,.2f}".format(invoice.subtotal) }}</td>
+                </tr>
+                <tr class="vat-row">
+                    <td colspan="3" class="text-right">VAT (15%)</td>
+                    <td class="text-right">R{{ "{:,.2f}".format(invoice.vat) }}</td>
+                </tr>
+                <tr class="total-row">
+                    <td colspan="3" class="text-right"><strong>Total Due</strong></td>
+                    <td class="text-right"><strong>R{{ "{:,.2f}".format(invoice.total) }}</strong></td>
+                </tr>
+            </tfoot>
+        </table>
+
+        <div class="invoice-footer">
+            <p><strong>Banking Details:</strong></p>
+            <p>Bank: First National Bank | Account: 62012345678 | Branch: 250655</p>
+            <p>Reference: {{ invoice.invoice_number }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% block title %}Time Entries - Ghost Practice{% endblock %}
+{% block page_title %}Time Entries{% endblock %}
+
+{% block topbar_actions %}
+{% if entries %}
+<form method="POST" action="{{ url_for('time_entries.approve_all') }}" class="inline-form">
+    <button type="submit" class="btn btn-success"><i class="fas fa-check-double"></i> Approve All Drafts</button>
+</form>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="page-time-entries">
+    <!-- Manual Add -->
+    <div class="card">
+        <div class="card-header"><h3><i class="fas fa-plus-circle"></i> Add Time Entry</h3></div>
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('time_entries.add') }}" class="form-row">
+                <div class="form-group">
+                    <label>Matter</label>
+                    <select name="matter_id" required>
+                        <option value="">Select...</option>
+                        {% for m in matters %}
+                        <option value="{{ m.id }}">{{ m.reference }} - {{ m.title|truncate(30) }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group flex-2">
+                    <label>Description</label>
+                    <input type="text" name="description" placeholder="Billing description" required>
+                </div>
+                <div class="form-group">
+                    <label>Date</label>
+                    <input type="date" name="date" value="{{ today if today else '' }}">
+                </div>
+                <div class="form-group">
+                    <label>Start</label>
+                    <input type="time" name="start_time" id="start_time" onchange="calcDur()">
+                </div>
+                <div class="form-group">
+                    <label>End</label>
+                    <input type="time" name="end_time" id="end_time" onchange="calcDur()">
+                </div>
+                <div class="form-group">
+                    <label>Duration (min)</label>
+                    <input type="number" name="duration" id="duration" min="0" max="600" value="0">
+                </div>
+                <div class="form-group form-action">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i> Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Filter -->
+    <div class="filter-bar">
+        <a href="{{ url_for('time_entries.index', status='all') }}" class="filter-btn {% if status_filter == 'all' %}active{% endif %}">All</a>
+        <a href="{{ url_for('time_entries.index', status='draft') }}" class="filter-btn {% if status_filter == 'draft' %}active{% endif %}">Draft</a>
+        <a href="{{ url_for('time_entries.index', status='approved') }}" class="filter-btn {% if status_filter == 'approved' %}active{% endif %}">Approved</a>
+        <a href="{{ url_for('time_entries.index', status='billed') }}" class="filter-btn {% if status_filter == 'billed' %}active{% endif %}">Billed</a>
+    </div>
+
+    <!-- Table -->
+    <div class="card">
+        <div class="card-body table-responsive">
+            {% if entries %}
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Matter</th>
+                        <th>Description</th>
+                        <th>Duration</th>
+                        <th>Units</th>
+                        <th>Rate</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for e in entries %}
+                    <tr class="fade-in" style="animation-delay: {{ loop.index0 * 0.03 }}s">
+                        <td>
+                            {{ e.date.strftime('%d %b') }}<br>
+                            {% if e.start_time and e.end_time %}
+                            <small class="text-muted">{{ e.start_time.strftime('%H:%M') }} - {{ e.end_time.strftime('%H:%M') }}</small>
+                            {% endif %}
+                        </td>
+                        <td>{{ e.matter.reference }}</td>
+                        <td class="title-cell">{{ e.description }}</td>
+                        <td>{{ e.duration_minutes|int }} min</td>
+                        <td><strong>{{ e.units }}</strong></td>
+                        <td>R{{ "{:,.0f}".format(e.rate) }}/hr</td>
+                        <td class="amount-cell">R{{ "{:,.2f}".format(e.amount) }}</td>
+                        <td><span class="status-badge status-{{ e.status }}">{{ e.status }}</span></td>
+                        <td class="actions-cell">
+                            {% if e.status == 'draft' %}
+                            <form method="POST" action="{{ url_for('time_entries.approve', entry_id=e.id) }}" class="inline-form">
+                                <button type="submit" class="btn btn-sm btn-success" title="Approve"><i class="fas fa-check"></i></button>
+                            </form>
+                            <form method="POST" action="{{ url_for('time_entries.delete', entry_id=e.id) }}" class="inline-form">
+                                <button type="submit" class="btn btn-sm btn-danger" title="Delete"><i class="fas fa-trash"></i></button>
+                            </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4"><strong>Total</strong></td>
+                        <td><strong>{{ entries|sum(attribute='units') }}</strong></td>
+                        <td></td>
+                        <td class="amount-cell"><strong>R{{ "{:,.2f}".format(entries|sum(attribute='amount')) }}</strong></td>
+                        <td colspan="2"></td>
+                    </tr>
+                </tfoot>
+            </table>
+            {% else %}
+            <div class="empty-state">
+                <i class="fas fa-clock"></i>
+                <p>No time entries found. Convert activities or add entries manually.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+function calcDur() {
+    const s = document.getElementById('start_time').value;
+    const e = document.getElementById('end_time').value;
+    if (s && e) {
+        const d1 = new Date("2000-01-01T" + s + ":00");
+        const d2 = new Date("2000-01-01T" + e + ":00");
+        let diff = (d2 - d1) / 60000;
+        if (diff < 0) diff += 24 * 60; // handle overnight
+        document.getElementById('duration').value = diff;
+    }
+}
+</script>
+{% endblock %}

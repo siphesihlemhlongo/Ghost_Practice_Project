@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Invoice {{ invoice.invoice_number }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; color: #1e293b; padding: 40px; background: #fff; font-size: 14px; }
+        .invoice { max-width: 800px; margin: 0 auto; }
+        .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 40px; border-bottom: 3px solid #3b82f6; padding-bottom: 20px; }
+        .brand h2 { font-size: 24px; color: #3b82f6; } .brand p { color: #64748b; font-size: 12px; }
+        .meta h1 { font-size: 28px; color: #3b82f6; text-align: right; margin-bottom: 10px; }
+        .meta table td { padding: 2px 8px; font-size: 13px; } .meta table td:first-child { color: #64748b; }
+        .client { margin-bottom: 20px; padding: 15px; background: #f8fafc; border-radius: 6px; }
+        .client h4 { color: #64748b; font-size: 11px; text-transform: uppercase; margin-bottom: 5px; }
+        .matter { margin-bottom: 25px; padding: 10px 0; border-bottom: 1px solid #e2e8f0; }
+        table.items { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+        table.items th { background: #1e293b; color: #fff; padding: 10px 12px; text-align: left; font-size: 12px; text-transform: uppercase; }
+        table.items td { padding: 10px 12px; border-bottom: 1px solid #e2e8f0; }
+        table.items tbody tr:nth-child(even) { background: #f8fafc; }
+        .text-right { text-align: right; } .text-center { text-align: center; }
+        tfoot td { padding: 8px 12px; } .total-row { font-size: 18px; background: #f1f5f9; font-weight: 700; }
+        .footer { margin-top: 40px; padding-top: 20px; border-top: 1px solid #e2e8f0; font-size: 12px; color: #64748b; }
+        @media print { body { padding: 0; } .no-print { display: none; } }
+    </style>
+</head>
+<body>
+<div class="invoice">
+    <div class="no-print" style="text-align:center;margin-bottom:20px">
+        <button onclick="window.print()" style="padding:10px 30px;background:#3b82f6;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:14px">
+            Print / Save as PDF
+        </button>
+    </div>
+    <div class="header">
+        <div class="brand">
+            <h2>MB Attorneys</h2>
+            <p>Houghton Estate, Johannesburg</p>
+            <p>Tel: +27 11 463 9401 | www.mb.co.za</p>
+        </div>
+        <div class="meta">
+            <h1>TAX INVOICE</h1>
+            <table>
+                <tr><td>Invoice No:</td><td><strong>{{ invoice.invoice_number }}</strong></td></tr>
+                <tr><td>Date:</td><td>{{ invoice.date_issued.strftime('%d %B %Y') }}</td></tr>
+                <tr><td>Due Date:</td><td>{{ invoice.due_date.strftime('%d %B %Y') if invoice.due_date else 'N/A' }}</td></tr>
+            </table>
+        </div>
+    </div>
+    <div class="client">
+        <h4>Bill To</h4>
+        <p><strong>{{ invoice.client.name }}</strong></p>
+        {% if invoice.client.address %}<p>{{ invoice.client.address }}</p>{% endif %}
+        {% if invoice.client.email %}<p>{{ invoice.client.email }}</p>{% endif %}
+    </div>
+    <div class="matter">
+        <p><strong>Re:</strong> {{ invoice.matter.title }} ({{ invoice.matter.reference }})</p>
+    </div>
+    <table class="items">
+        <thead><tr><th>Description</th><th class="text-center">Units</th><th class="text-right">Rate (R/hr)</th><th class="text-right">Amount (R)</th></tr></thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>{{ item.description }}</td>
+                <td class="text-center">{{ item.units }}</td>
+                <td class="text-right">{{ "{:,.2f}".format(item.rate) }}</td>
+                <td class="text-right">{{ "{:,.2f}".format(item.amount) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr><td colspan="3" class="text-right">Subtotal</td><td class="text-right">R{{ "{:,.2f}".format(invoice.subtotal) }}</td></tr>
+            <tr><td colspan="3" class="text-right">VAT (15%)</td><td class="text-right">R{{ "{:,.2f}".format(invoice.vat) }}</td></tr>
+            <tr class="total-row"><td colspan="3" class="text-right">Total Due</td><td class="text-right">R{{ "{:,.2f}".format(invoice.total) }}</td></tr>
+        </tfoot>
+    </table>
+    <div class="footer">
+        <p><strong>Banking Details:</strong> First National Bank | Acc: 62012345678 | Branch: 250655 | Ref: {{ invoice.invoice_number }}</p>
+        <p style="margin-top:10px">Payment due within 30 days of invoice date. Thank you for your continued trust.</p>
+    </div>
+</div>
+</body>
+</html>

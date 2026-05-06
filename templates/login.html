@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Login - Ghost Practice{% endblock %}
+{% block public_content %}
+<div class="login-page">
+    <div class="login-bg"></div>
+    <div class="login-card">
+        <div class="login-logo">
+            <i class="fas fa-ghost"></i>
+            <h1>Ghost Practice</h1>
+            <p>Automated Time Tracking & Billing</p>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="flash-message flash-{{ category }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        <form method="POST" class="login-form">
+            <div class="form-group">
+                <label for="email"><i class="fas fa-envelope"></i> Email</label>
+                <input type="email" id="email" name="email" placeholder="you@mb.co.za" required>
+            </div>
+            <div class="form-group">
+                <label for="password"><i class="fas fa-lock"></i> Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter password" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full">
+                <i class="fas fa-sign-in-alt"></i> Sign In
+            </button>
+        </form>
+
+        <div class="login-hint">
+            <p><strong>Demo Credentials:</strong></p>
+            <p>sphesihle@mb.co.za / password123</p>
+            <p>thabo@mb.co.za / password123</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
