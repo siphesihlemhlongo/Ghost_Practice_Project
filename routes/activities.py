@@ -18,6 +18,15 @@ def index():
     if status_filter != "all":
         query = query.filter_by(status=status_filter)
     activities = query.order_by(Activity.created_at.desc()).all()
+    
+    now = datetime.utcnow()
+    for act in activities:
+        if act.status == 'pending' and act.started_at:
+            age = now - act.started_at
+            act.is_overdue = age.days >= 3
+        else:
+            act.is_overdue = False
+            
     matters = Matter.query.filter_by(status="active").all()
     clients = Client.query.order_by(Client.name).all()
     today = datetime.utcnow().date()

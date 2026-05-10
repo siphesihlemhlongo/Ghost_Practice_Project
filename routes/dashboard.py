@@ -60,6 +60,14 @@ def index():
     recent_activities = Activity.query.filter_by(
         user_id=current_user.id
     ).order_by(Activity.created_at.desc()).limit(5).all()
+    
+    now = datetime.utcnow()
+    for act in recent_activities:
+        if act.status == 'pending' and act.started_at:
+            age = now - act.started_at
+            act.is_overdue = age.days >= 3
+        else:
+            act.is_overdue = False
 
     # Daily hours for the last 7 days (for chart)
     daily_hours = []

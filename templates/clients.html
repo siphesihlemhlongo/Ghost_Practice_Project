@@ -43,13 +43,33 @@
                 </div>
 
                 <h4 class="section-title">Matters</h4>
-                {% if client.matters.count() > 0 %}
+                {% set visible_matters = [] %}
+                {% for m in client.matters %}
+                    {% if current_user in m.team or current_user.role == 'manager' %}
+                        {% set _ = visible_matters.append(m) %}
+                    {% endif %}
+                {% endfor %}
+
+                {% if visible_matters|length > 0 %}
                 <ul class="matter-list">
-                    {% for m in client.matters %}
-                    <li>
-                        <span class="matter-ref">{{ m.reference }}</span>
-                        <span class="matter-title">{{ m.title }}</span>
-                        <span class="status-badge status-{{ m.status }}">{{ m.status }}</span>
+                    {% for m in visible_matters %}
+                    <li class="matter-item">
+                        <div class="matter-header">
+                            <a href="{{ url_for('clients.matter_detail', matter_id=m.id) }}" class="matter-ref" style="text-decoration: none;">{{ m.reference }}</a>
+                            <a href="{{ url_for('clients.matter_detail', matter_id=m.id) }}" class="matter-title" style="text-decoration: none; color: inherit;">{{ m.title }}</a>
+                            <span class="status-badge status-{{ m.status }}">{{ m.status }}</span>
+                        </div>
+                        <div class="matter-team mt-2">
+                            <small class="text-muted"><i class="fas fa-users"></i> Team:</small>
+                            <div class="team-avatars" style="display: flex; align-items: center; gap: 4px;">
+                                {% for u in m.team %}
+                                <span class="team-badge" title="{{ u.name }}">{{ u.name[:2]|upper }}</span>
+                                {% endfor %}
+                                <button type="button" class="team-badge btn-icon" style="background: transparent; border: 1px dashed var(--text-muted); cursor: pointer; color: var(--text-muted);" onclick="document.getElementById('modal-team-{{ m.id }}').style.display='flex'" title="Manage Team">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
                     </li>
                     {% endfor %}
                 </ul>
@@ -57,13 +77,85 @@
                 <p class="text-muted">No matters yet.</p>
                 {% endif %}
 
-                <!-- Add Matter -->
-                <form method="POST" action="{{ url_for('clients.add_matter', client_id=client.id) }}" class="add-matter-form">
-                    <input type="text" name="title" placeholder="New matter title" required class="sm-input">
-                    <button type="submit" class="btn btn-sm btn-accent"><i class="fas fa-plus"></i></button>
-                </form>
+                <!-- Add Matter Button -->
+                <button type="button" class="btn btn-sm btn-ghost mt-2" style="width: 100%; border-style: dashed;" onclick="document.getElementById('modal-add-matter-{{ client.id }}').style.display='flex'">
+                    <i class="fas fa-plus"></i> Add Matter
+                </button>
             </div>
         </div>
+        
+        <!-- Add Matter Modal -->
+        <div id="modal-add-matter-{{ client.id }}" class="modal">
+            <div class="modal-content">
+                <div class="card-header">
+                    <h3><i class="fas fa-plus-circle"></i> New Matter for {{ client.name }}</h3>
+                    <button type="button" class="close-btn" onclick="document.getElementById('modal-add-matter-{{ client.id }}').style.display='none'"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('clients.add_matter', client_id=client.id) }}">
+                        <div class="form-group mb-3" style="margin-bottom: 16px;">
+                            <label>Matter Title</label>
+                            <input type="text" name="title" placeholder="e.g. Commercial Lease Agreement" required style="width: 100%;">
+                        </div>
+                        <div class="form-group mb-3" style="margin-bottom: 16px;">
+                            <label>Description (Optional)</label>
+                            <textarea name="description" placeholder="Brief details about the matter" style="width: 100%; min-height: 80px;"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full">Create Matter</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        {% for m in visible_matters %}
+        <!-- Manage Team Modal -->
+        <div id="modal-team-{{ m.id }}" class="modal">
+            <div class="modal-content">
+                <div class="card-header">
+                    <h3><i class="fas fa-users-cog"></i> Team: {{ m.reference }}</h3>
+                    <button type="button" class="close-btn" onclick="document.getElementById('modal-team-{{ m.id }}').style.display='none'"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="card-body">
+                    <h4 class="section-title">Current Team Members</h4>
+                    {% if m.team %}
+                    <ul class="team-list">
+                        {% for u in m.team %}
+                        <li>
+                            <span><i class="fas fa-user-circle text-muted"></i> {{ u.name }} <small class="text-muted">({{ u.role }})</small></span>
+                            <form method="POST" action="{{ url_for('clients.remove_team', matter_id=m.id) }}" style="margin: 0;">
+                                <input type="hidden" name="user_id" value="{{ u.id }}">
+                                <button type="submit" class="btn btn-sm btn-ghost" style="color: var(--red);"><i class="fas fa-trash"></i></button>
+                            </form>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p class="text-muted" style="margin-bottom: 20px;">No team members assigned.</p>
+                    {% endif %}
+                    
+                    <hr style="border: none; border-top: 1px solid var(--border); margin: 20px 0;">
+                    
+                    <h4 class="section-title">Assign New Member</h4>
+                    <form method="POST" action="{{ url_for('clients.assign_team', matter_id=m.id) }}" class="form-row" style="align-items: center;">
+                        <div class="form-group flex-2">
+                            <select name="user_id" required class="sm-select" style="width: 100%; padding: 10px;">
+                                <option value="" disabled selected>Select user...</option>
+                                {% for u in users %}
+                                {% if u not in m.team %}
+                                <option value="{{ u.id }}">{{ u.name }} ({{ u.role }})</option>
+                                {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-action">
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-user-plus"></i> Assign</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
         {% endfor %}
     </div>
     {% else %}

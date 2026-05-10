@@ -113,7 +113,12 @@
                         <td><span class="source-badge">{{ act.source }}</span></td>
                         <td>{{ act.duration_minutes|int }} min</td>
                         <td>{% if act.matter %}{{ act.matter.reference }}{% else %}<em class="text-muted">Unassigned</em>{% endif %}</td>
-                        <td><span class="status-badge status-{{ act.status }}">{{ act.status }}</span></td>
+                        <td>
+                            <span class="status-badge status-{{ act.status }}">{{ act.status }}</span>
+                            {% if act.is_overdue %}
+                            <span class="status-badge status-overdue" style="margin-left: 4px; background-color: rgba(239, 68, 68, 0.2); color: #ef4444; border-color: #ef4444;" title="Older than 3 days. Please convert to billable time!"><i class="fas fa-exclamation-triangle"></i> Overdue</span>
+                            {% endif %}
+                        </td>
                         <td class="actions-cell">
                             {% if act.status == 'pending' %}
                             <form method="POST" action="{{ url_for('activities.convert', activity_id=act.id) }}" class="inline-form">

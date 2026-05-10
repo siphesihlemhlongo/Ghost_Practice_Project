@@ -95,6 +95,9 @@
                             <span class="activity-meta">
                                 {{ act.duration_minutes|int }} min &middot;
                                 <span class="status-badge status-{{ act.status }}">{{ act.status }}</span>
+                                {% if act.is_overdue %}
+                                <span class="status-badge status-overdue" style="margin-left: 4px; background-color: rgba(239, 68, 68, 0.2); color: #ef4444; border-color: #ef4444;" title="Older than 3 days. Please convert to billable time!"><i class="fas fa-exclamation-triangle"></i> Overdue</span>
+                                {% endif %}
                             </span>
                         </div>
                     </li>

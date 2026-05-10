@@ -63,7 +63,16 @@ def seed():
         associate = User(name="Naledi Mokoena", email="naledi@mb.co.za", role="attorney", hourly_rate=1800.00)
         associate.set_password("password123")
 
-        db.session.add_all([attorney, manager, associate])
+        attorney2 = User(name="Sarah Connor", email="sarah@mb.co.za", role="attorney", hourly_rate=2200.00)
+        attorney2.set_password("password123")
+
+        paralegal = User(name="David Miller", email="david@mb.co.za", role="attorney", hourly_rate=1200.00)
+        paralegal.set_password("password123")
+
+        manager2 = User(name="John Smith", email="john@mb.co.za", role="manager", hourly_rate=3500.00)
+        manager2.set_password("password123")
+
+        db.session.add_all([attorney, manager, associate, attorney2, paralegal, manager2])
         db.session.flush()
 
         # Create clients
@@ -75,6 +84,7 @@ def seed():
         db.session.flush()
 
         # Create matters
+        all_users = [attorney, manager, associate, attorney2, paralegal, manager2]
         matters = []
         for i, m in enumerate(MATTERS_DATA):
             matter = Matter(
@@ -84,6 +94,11 @@ def seed():
                 client_id=clients[m["client_idx"]].id,
                 status="active",
             )
+            
+            # Assign random team members
+            team_size = random.randint(1, 3)
+            matter.team = random.sample(all_users, team_size)
+            
             db.session.add(matter)
             matters.append(matter)
         db.session.flush()
@@ -99,13 +114,14 @@ def seed():
             for _ in range(num_activities):
                 tmpl = random.choice(ACTIVITY_TEMPLATES)
                 matter = random.choice(matters)
+                assigned_user = random.choice(matter.team)
                 dur = random.randint(tmpl[2][0], tmpl[2][1])
                 hour = random.randint(8, 17)
                 started = datetime.combine(d, datetime.min.time().replace(hour=hour))
                 ended = started + timedelta(minutes=dur)
 
                 activity = Activity(
-                    user_id=attorney.id,
+                    user_id=assigned_user.id,
                     type=tmpl[0],
                     title=f"{tmpl[1]} - {matter.title}",
                     description=f"Work on {matter.reference}",
@@ -114,16 +130,16 @@ def seed():
                     ended_at=ended,
                     duration_minutes=dur,
                     matter_id=matter.id,
-                    status="converted" if day_offset > 0 else "pending",
+                    status="pending" if day_offset == 0 or random.random() < 0.3 else "converted",
                 )
                 db.session.add(activity)
                 db.session.flush()
 
-                # Create time entries for past days (not today - today's are pending)
-                if day_offset > 0:
+                # Create time entries only for converted activities
+                if activity.status == "converted":
                     entry = TimeEntry(
                         activity_id=activity.id,
-                        user_id=attorney.id,
+                        user_id=assigned_user.id,
                         matter_id=matter.id,
                         date=d,
                         start_time=started.time(),

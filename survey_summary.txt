@@ -1,0 +1,120 @@
+=== FRUSTRATIONS ===
+- The system is slow during month end. 
+- Nothing
+- none.
+- None. 
+- The current Outlook integration is not fully optimized for operational efficiency. There should be functionality that allows users to save emails directly to the transactional history of a matter without having to manually allocate them between categories such as “Web,” “Fees,” or “File Notes.”
+- the application takes time to load. 
+- na
+- N:B - SPEED!
+- limited mobile functionality, occasional slow load times, and the need for more customisable reporting options
+- Editing of transactions were extremely time consuming - especially when performing bulk editing over a lengthy period. 
+- That GP does not show when disbursements are paid from Finance to counsel and/or correspondent attorneys and/or sheriffs to name a few on Transaction History or the Statement of Accounts. 
+- I am uncertain if this is GP, but when loading fees from home, the response time is slower, and it often glitches, which extends the time spent on GP. 
+- Sometimes when we work from home, the response time in opening GP tends to delay, but that is usually due to the VPN connection. However, that is not an issue when you are in the office 
+- It does sometime become slow and hampered - especially when there are many people using it. The reports are not always accurate the first time and sometimes you need to pull a report more than once to include fees you know are there but just does not seem to pull through. It should remind people to post their fees daily. 
+- none 
+- GP can occasionally experience slowdowns, but it has recently been stable 
+- If the wrong figures in an invoice in generated, it is impossible to delete and redo the invoice. We have to ask finance to delete same and they are already overwhelmed by alot of matters. GP does not work for conveyancing because GP makes provision for unbilled and unbillable amounts - this is not the case with conveyancing because all conveyancing clients settle their statements of account accordingly. We cannot invoice for reading a deed search, or for reading an email from client, or for an appointment for signature of the bond or transfer documents, these are inherit duties for conveyancers. The work we do comes from the set fee we charge the client
+- Time not automatically being posted under your name - having to manually change to the correct fee earner. We don't make use of the document upload and version update system, which could be helpful when tracking documents across a deal team
+- When uploading invoices and then I realise that I have mispelt a word.   Once the invoice is posted there you cannot amend it unless your request finance to credit it.
+- N/A I do not have any frustrations
+- Too restrictive on the finance end
+- The speed in which the app responds to saving emails from outlook 
+- The duplicate efforts when capturing hours
+- Its slow
+- Nil 
+- requires constant engagement to improve proficiency - otherwise concepts can be easily forgotten
+- Fees and Notes
+- its not user friendly
+- The interface can sometimes be slow to start up and have a delayed response when capturing time entries. I usually access GP through the Outlook integration
+- I dont have many concerns. The only problem is lack of classifications options, making it difficult to consistently categorise matters for reporting purposes. There is also limited flexibility in terms of users permission, for instance when you are an admin, you cant create folders or manage folders which can slow down administrative process. That said, this is something GP has indicated they will look into 
+- 1. That we cannot generate our own proforma invoices to check. If the secretary is unavailable, I usually have to ask around for someone to assist in generating a proforma and return with another request for a proforma as soon as all corrections have been made. 
+
+2. No automatic capturing of fees. Every single entry has to be loaded manually and on busy days I might miss loading a call or brief billable discussion. 
+- can't change the font
+
+=== IMPORTANT FEATURES ===
+- Automatic billing each time an email is sent and received - under the correct MAT number with an accurate mini narration. Billing for emails sent and received is extremely tedious and time consuming, and as noted above, could be 1000s of emails across various matters, a month. Billing for the big items (day fees, court attendances, meetings, etc.) are fine, but the emails, especially in the litigation space, not so great. 
+- Real time tracking of my hours on different matters
+- Recordal of fees by team members to track time and fee target progress; being updated on balances outstanding by clients - downloading statements; checking fee targets; bill and unbillable hours; downloading documents / emails / pleadings uploaded thereon ; keeping track on matters.
+- Integration with Outlook and T-Drive to ensure seamless tracking. Outlook Ghost Practice "add-ins" are very useful. 
+- 1)Full cross-departmental integration: The system must seamlessly integrate all departments (Finance, Conveyancing, Admin, etc.) to eliminate silos and ensure real-time visibility across matters.
+2)Centralised document management: The ability to store, access, and manage all documents within the system is essential, with documents linked directly to each matter for ease of reference and compliance.
+3)Advanced and customisable reporting: The system should allow the firm to generate tailored reports based on specific requirements, including accurate tracking of active vs inactive files and departmental performance.
+4)File lifecycle management: Functionality that allows secretaries to deactivate files once Finance has finalised matters, ensuring cleaner data and more reliable reporting on active matters.
+5)Seamless Outlook integration: Direct saving of emails into a matter’s transactional history without unnecessary categorisation steps (e.g., avoiding manual allocation between web, fees, or file notes).
+6)Operational efficiency and automation: Reduction of manual processes through automation, improving turnaround times and minimizing administrative workload.
+- Posting fees and being able to monitor my KPI's more smoothly. 
+- Document Management 
+- I think GP has a lot of features that accommodate each department which other system cannot compare with 
+- pre-loaded/amendable rates for matters.
+- client management, robust reporting, mobile accessibility, and easy collaboration among team members
+- Tracking of individual financials in a streamlined process. The standard reports are limited.
+- Add-ins and being able to track whether you are going to meet and/or exceed your monthly target. 
+- The add-ins of loading an email onto GP directly from Outlook. 
+- The Add-in system on outlook and Microsoft Apps to easily save work and capture time.
+- Ease of posting fees, accurate data when pulling reports, would be nice to be able to pull a report to not only show current fee target progress but also on which matters the amounts have been invoiced. 
+
+Would be nice to see readily whether a client has paid their fees or not in real time when you access a matter number; 
+
+Prompts that require people to post fees during the work day when discipline to do so is lacking.
+
+The ability to post fees on the run through your cell phone. 
+- A strict feature should be implemented to ensure that time is captured within the same week. For example, introducing a “red list” for individuals who do not capture their time within 3 days would promote accountability (I speak for myself in this regard) and prevent billing from being deferred until the end of the week or end of the month 
+- Features that would be most important to me in a new system that are also currently on GP or can be similar to the ones on GP are the Fees and Files Notes feature where I enter my fees, a Legal Diary Feature where I keep track of all matters that I am working on, a Transaction History feature which shows the fees history for all matters, and the Reports feature where I would be able to see reports feature relating to monthly targets. 
+- 1. Built in compliance - like KYC and FICA
+2. Be user-friendly especially for onboarding
+3. Built in milestones for each department
+- A thorough documents management system that allows teams tracking and version control. The Ability to monitor what apps are being used / open - which is helpful when recording time and tracking tasks.
+- It will be great if the new system comes with templates of pleadings and notices, so that there is uniformity for the whole company when notices are being prepared
+- Being able to see/ review the transaction history of a matter.
+- support of batch imports, meaning less spreadsheet work and faster processing of transactions and a more integrated finance ecosystem
+- recording of acurate times when working on documents 
+- Ease of use when capturing hours and reports that will assist in tracking hours billed and projects worked on
+- Uploading of fees and generating pro formas
+- Not sure as Im not a frequent user
+- A system that can automatically pick up on Fees and Notes and record them automatically
+- user friendly by allowing one to time record as soon as one is done with a task
+- I have used debt collection before at a previous firm. Ghost practice has pros and cons to it, but I really feel like more tools could be added. Being able to capture matter description, whether the matter is completed. From the tender department it would be great if the system would be able to provide us with the methodology and approach of how each matter was executed. This would assist a great deal when having to complete bid documents that require matter descriptions. Once a matter has received a judgement it should be captured as well as the relevant documents pertaining to the matter. It would also be great if the system could assist the debt collection department in working efficiently. 
+- A more user-friendly interface
+- strong matter management capabilities with structures and customisable data fields to ensure consistent capture of key information such as matter classifications and appropriate user permission that allow administrative users sufficient control without requesting full system administrator access.
+- Fees and File Notes & Transaction History
+- Automatic fee loading / generating our own proformas to check before submitting
+- billing
+
+=== MISSING FEATURES ===
+- It is a great system, tailored for lawyers, however, it's very manual, labour intense and administrative. Admin isn't one of my strong points. It would be helpful if there were automatic billing items available - as explained below for emails, which make up massive amounts on an invoice and end up being 1000s in a single month. 
+- No
+- no.
+- None. 
+- Once Finance has finalized the allocation and reconciliation of funds for each matter, secretaries should be granted the ability to deactivate files. This will enhance operational efficiency and ensure more accurate reporting, enabling each department to generate reliable reports reflecting only active matters.
+- No.
+- na
+- RDP milestone
+- amending pre-loaded narrations of fees (or adding them). 
+- While Ghost Practice is very useful, features like more detailed reporting, better mobile access, and improved document collaboration could enhance its functionality
+- Bulk invoicing. It would be efficient to bill multiple matters simultaneously. Apply a rule to all matters to generate invoices.
+- Yes, a notification once clients have settled / paid an invoice and when disbursements are paid from Finance to counsel and/or correspondent attorneys and/or sheriffs to name a few. 
+- It is not a missing function, but I think it would be beneficial as a fee earner to generate a pro-forma for myself throughout the month and amend the narrations to make month end invoicing more efficient. 
+- Currently, no.
+- It could have been easier to see where a clients stands on paying invoices. Not clearly and easily accessible to understand whether a client has paid or not? 
+- n/a 
+- No, not at the moment
+- Yes, GP is inadequate because there are several matters on GP that was previously handled by someone else and there are unbilled/ pending disbursements/ unbillable amounts which makes it difficult for us to archive the matters as we cannot simply "delete" these unbillable/pending disbursements/unbilled amounts. 
+- Not really
+- nope
+- More focused for legal work than for finance
+- Duplicatenefforts when capturing hours
+- Cost recovery features could be better
+- To revert
+- Adequate for now
+- Fees and Notes
+- cant tell
+- Debt Collection support
+- At this stage, no.
+- 1. Automatic capturing of fees functionality 
+2. An overview of credit notes (which affect my target). Presently, I can only see that a credit note is reflecting a negative balance against my target and I then have to request the Finance Department to establish which credit notes were issued and reflecting. The one month, even Finance could not establish why there was a negative reflecting on the report as no credit notes reflected on my matters. 
+2. Although GP can show a monthly report of matters and amounts billed, I would also like to be able to see which invoice number specifically was billed to the client in a monthly overview. This would make it more effective for me to be able to address queries. 
+
+- no

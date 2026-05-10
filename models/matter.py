@@ -1,6 +1,11 @@
 from models import db
 from datetime import datetime
+from datetime import datetime
 
+matter_team = db.Table('matter_team',
+    db.Column('matter_id', db.Integer, db.ForeignKey('matters.id'), primary_key=True),
+    db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True)
+)
 
 class Matter(db.Model):
     __tablename__ = "matters"
@@ -14,6 +19,7 @@ class Matter(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     # Relationships
+    team = db.relationship("User", secondary=matter_team, backref=db.backref("assigned_matters", lazy="dynamic"))
     activities = db.relationship("Activity", backref="matter", lazy="dynamic")
     time_entries = db.relationship("TimeEntry", backref="matter", lazy="dynamic")
     invoices = db.relationship("Invoice", backref="matter", lazy="dynamic")
