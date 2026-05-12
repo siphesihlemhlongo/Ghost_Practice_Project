@@ -25,6 +25,9 @@
                 <a href="{{ url_for('dashboard.index') }}" class="nav-item {% if request.endpoint == 'dashboard.index' %}active{% endif %}">
                     <i class="fas fa-chart-line"></i><span>Dashboard</span>
                 </a>
+                <a href="{{ url_for('clients.index') }}" class="nav-item {% if request.endpoint and 'clients' in request.endpoint %}active{% endif %}">
+                    <i class="fas fa-building"></i><span>Clients & Matters</span>
+                </a>
                 <a href="{{ url_for('activities.index') }}" class="nav-item {% if request.endpoint and 'activities' in request.endpoint %}active{% endif %}">
                     <i class="fas fa-bolt"></i><span>Activities</span>
                     {% if pending_activity_count is defined and pending_activity_count > 0 %}
@@ -36,9 +39,6 @@
                 </a>
                 <a href="{{ url_for('invoices.index') }}" class="nav-item {% if request.endpoint and 'invoices' in request.endpoint %}active{% endif %}">
                     <i class="fas fa-file-invoice-dollar"></i><span>Invoices</span>
-                </a>
-                <a href="{{ url_for('clients.index') }}" class="nav-item {% if request.endpoint and 'clients' in request.endpoint %}active{% endif %}">
-                    <i class="fas fa-building"></i><span>Clients & Matters</span>
                 </a>
             </nav>
             <div class="sidebar-footer">
