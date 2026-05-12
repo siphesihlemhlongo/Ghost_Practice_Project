@@ -153,6 +153,26 @@ def seed():
                     entry.compute_billing()
                     db.session.add(entry)
 
+        # GUARANTEE OVERDUES FOR SPHESIHLE
+        four_days_ago = today - timedelta(days=4)
+        for i in range(3):
+            matter = matters[i]
+            dur = 25 + (i * 10)
+            started = datetime.combine(four_days_ago, datetime.min.time().replace(hour=10 + i))
+            activity = Activity(
+                user_id=attorney.id,
+                type="email",
+                title=f"Review opposing counsel email - {matter.title}",
+                description="Long email thread review",
+                source="outlook",
+                started_at=started,
+                ended_at=started + timedelta(minutes=dur),
+                duration_minutes=dur,
+                matter_id=matter.id,
+                status="pending"
+            )
+            db.session.add(activity)
+
         db.session.commit()
         print("Database seeded successfully!")
         print(f"Users: {User.query.count()}")
